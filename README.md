@@ -24,6 +24,8 @@ RESPONSE val2
 
 `counts by parsed payloads`
 ```
-REQUEST-val: 1
-RESPONSE-val2: 1
+RESPONSE-val2: 2
+RESPONSE-val4: 1
+RESPONSE-val3: 1
+REQUEST-val: 2
 ```
