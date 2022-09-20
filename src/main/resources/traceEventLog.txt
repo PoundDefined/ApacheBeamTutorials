@@ -1,0 +1,2 @@
+{"segmentName":  "abc", "requestId": "123", "eventType": "REQUEST", "payload": "{\"key\": \"val\"}"}
+{"segmentName":  "abc", "requestId": "123", "eventType": "RESPONSE", "payload": "{\"key\": \"val2\"}"}
