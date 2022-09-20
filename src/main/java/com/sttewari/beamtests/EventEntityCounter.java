@@ -5,9 +5,8 @@ import org.apache.beam.sdk.io.TextIO;
 import org.apache.beam.sdk.options.PipelineOptions;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
 import org.apache.beam.sdk.transforms.Count;
+import org.apache.beam.sdk.transforms.GroupByKey;
 import org.apache.beam.sdk.transforms.MapElements;
-import org.apache.beam.sdk.transforms.Values;
-import org.apache.beam.sdk.transforms.WithKeys;
 import org.apache.beam.sdk.values.KV;
 import org.apache.beam.sdk.values.PCollection;
 import org.apache.beam.sdk.values.TypeDescriptor;
@@ -57,9 +56,25 @@ public class EventEntityCounter {
                         .via((ParsedEventModel payload) ->
                                  payload.getEventModel().getEventType() + " " + payload.getPayloadModel().getKey())
                 )
-                .apply(TextIO.write().to("./out/parsedPayload"));
+                .apply(TextIO.write()
+                        .withNoSpilling()
+                        .to("./target/out/parsedPayload.out"));
 
-        // group keys by request/response payload
+        // group keys in parsed payload
+        tracePCollection
+                .apply("Count keys by request and payload value type", MapElements
+                        .into(TypeDescriptors.strings())
+                        .via((ParsedEventModel parsedEvent) ->
+                            parsedEvent.getEventModel().getEventType() + "-" + parsedEvent.getPayloadModel().getKey()
+                        )
+                )
+                .apply(Count.perElement())
+                .apply("FormatResults", MapElements
+                        .into(TypeDescriptors.strings())
+                        .via((KV<String, Long> wordCount) -> wordCount.getKey() + ": " + wordCount.getValue()))
+                .apply(TextIO.write()
+                        .withNoSpilling()
+                        .to("./target/out/countPerKey.out"));
 
         pipeline.run().waitUntilFinish();
     }
