@@ -29,3 +29,10 @@ RESPONSE-val4: 1
 RESPONSE-val3: 1
 REQUEST-val: 2
 ```
+
+`filteredWithKeyVal.out`
+
+```
+REQUEST val
+REQUEST val
+```
