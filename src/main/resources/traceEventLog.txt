@@ -1,6 +1,6 @@
-{"segmentName":  "abc", "requestId": "123", "eventType": "REQUEST", "payload": "{\"key\": \"val\"}"}
-{"segmentName":  "abc", "requestId": "123", "eventType": "RESPONSE", "payload": "{\"key\": \"val2\"}"}
-{"segmentName":  "abc", "requestId": "123", "eventType": "RESPONSE", "payload": "{\"key\": \"val3\"}"}
-{"segmentName":  "abc", "requestId": "123", "eventType": "RESPONSE", "payload": "{\"key\": \"val4\"}"}
-{"segmentName":  "abc", "requestId": "123", "eventType": "REQUEST", "payload": "{\"key\": \"val\"}"}
-{"segmentName":  "abc", "requestId": "123", "eventType": "RESPONSE", "payload": "{\"key\": \"val2\"}"}
+{"segmentName":  "service1", "requestId": "123", "eventType": "REQUEST", "payload": "{\"key\": \"val\"}"}
+{"segmentName":  "service1", "requestId": "123", "eventType": "RESPONSE", "payload": "{\"key\": \"val2\"}"}
+{"segmentName":  "service2", "requestId": "abc", "eventType": "REQUEST", "payload": "{\"key\": \"val3\"}"}
+{"segmentName":  "service2", "requestId": "abc", "eventType": "RESPONSE", "payload": "{\"key\": \"val4\"}"}
+{"segmentName":  "service3", "requestId": "xyz", "eventType": "REQUEST", "payload": "{\"key\": \"val\"}"}
+{"segmentName":  "service3", "requestId": "xyz", "eventType": "RESPONSE", "payload": "{\"key\": \"val2\"}"}

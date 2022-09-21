@@ -1,11 +1,14 @@
 package com.sttewari.beamtests;
 
+import com.sttewari.domainModels.EventModel;
+import com.sttewari.domainModels.ParsedEventModel;
+import com.sttewari.domainModels.PayloadModel;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.io.TextIO;
 import org.apache.beam.sdk.options.PipelineOptions;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
 import org.apache.beam.sdk.transforms.Count;
-import org.apache.beam.sdk.transforms.GroupByKey;
+import org.apache.beam.sdk.transforms.Filter;
 import org.apache.beam.sdk.transforms.MapElements;
 import org.apache.beam.sdk.values.KV;
 import org.apache.beam.sdk.values.PCollection;
@@ -18,12 +21,12 @@ import java.io.IOException;
 public class EventEntityCounter {
 
     private static final ObjectMapper OM = new ObjectMapper();
+
     public static void main(String[] args) {
         PipelineOptions pipelineOptions = PipelineOptionsFactory.create();
-
-
         Pipeline pipeline = Pipeline.create(pipelineOptions);
 
+        // get parsed collection
         PCollection<ParsedEventModel> tracePCollection = pipeline.apply(TextIO.read()
                         .from("./src/main/resources/traceEventLog.txt"))
                 .apply("ParseToEntity", MapElements
@@ -48,6 +51,19 @@ public class EventEntityCounter {
                         })
                 );
 
+        tracePCollection
+                .apply("Service1", Filter
+                        .by((ParsedEventModel eventModel) ->
+                                "val".equalsIgnoreCase(eventModel.getPayloadModel().getKey()))
+                )
+                .apply("FormatResults", MapElements
+                        .into(TypeDescriptors.strings())
+                        .via((ParsedEventModel payload) ->
+                                payload.getEventModel().getEventType() + " " + payload.getPayloadModel().getKey())
+                )
+                .apply(TextIO.write()
+                        .withNoSpilling()
+                        .to("./target/out/filteredWithKeyVal.out"));
 
         // parse to payload
         tracePCollection
